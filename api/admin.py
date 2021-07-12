@@ -1,4 +1,10 @@
 from django.contrib import admin
-from api.models import CustomUser
+from api import models
 
-admin.site.register([CustomUser])
+admin.site.register([
+    models.CustomUser,
+    models.Tag,
+    models.Problem,
+    models.UploadTC,
+    models.Submission
+    ])
