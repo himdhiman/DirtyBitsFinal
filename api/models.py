@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+import string, random
 
 
 class DateTime(models.Model):
@@ -12,6 +13,7 @@ class CustomUserManager(BaseUserManager):
             first_Name = first_Name,
             last_Name = last_Name,
         )
+        user.access_token = str(''.join(random.choices(string.ascii_uppercase + string.digits, k = 20)))
         user.set_password(password)
         user.save(using = self._db)
         return user
@@ -21,9 +23,9 @@ class CustomUserManager(BaseUserManager):
             email = self.normalize_email(email),
             first_Name = first_Name,
             last_Name = last_Name,
-            password = password
+            password = password,
         )
-
+        user.access_token = str(''.join(random.choices(string.ascii_uppercase + string.digits, k = 20)))
         user.is_admin = True
         user.is_staff = True
         user.is_superuser = True
@@ -36,6 +38,7 @@ class CustomUser(AbstractBaseUser):
     email = models.EmailField(verbose_name = "email", unique = True, max_length = 60)
     first_Name = models.CharField(max_length = 20)
     last_Name = models.CharField(max_length = 20)
+    access_token = models.TextField(blank=True, null=True, default="NA")
     joining_Date = models.DateField(auto_now = True, verbose_name = "date joined")
     last_login = models.DateField(auto_now = True, verbose_name = "last login")
     solved = models.IntegerField(blank=True, null=True, default=0)
@@ -90,8 +93,8 @@ class Problem(models.Model):
     sampleTc = models.IntegerField()
     totalTC = models.IntegerField()
     createdAt = models.DateField()
-    memoryLimit = models.CharField(max_length = 20, null = True, blank = True)
-    timeLimit = models.CharField(max_length = 20, null = True, blank = True)
+    memoryLimit = models.IntegerField(null = True, blank = True, default=0)
+    timeLimit = models.IntegerField(null = True, blank = True, default=0)
 
 
     def __str__(self):

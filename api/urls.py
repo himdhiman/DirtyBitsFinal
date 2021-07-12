@@ -4,7 +4,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('', views.upload_tc)
+    path('', views.upload_tc),
+    path('getData/', views.getData)
 ]
 
 if settings.DEBUG:
