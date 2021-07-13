@@ -1,15 +1,20 @@
 from pathlib import Path
 import os
-BASE_DIR = Path(__file__).resolve().parent.parent
-SECRET_KEY = '0o$7b0#npwgcj+nctdq+!525e#p(64+p=yt_t+47w20r8wo&!('
+import environ
 
-DEBUG = True
+env = environ.Env()
+environ.Env.read_env()
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+SECRET_KEY = env('SECRET_KEY')
+
+DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = [
     'rest_framework',
-    'api',
+    env('APP_NAME'),
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -29,7 +34,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'DirtyBits.urls'
+ROOT_URLCONF = env('ROOT_URLCONF')
 
 TEMPLATES = [
     {
@@ -47,18 +52,18 @@ TEMPLATES = [
     },
 ]
 
-AUTH_USER_MODEL = 'api.CustomUser'
+AUTH_USER_MODEL = env('AUTH_USER_MODEL')
 
-WSGI_APPLICATION = 'DirtyBits.wsgi.application'
+WSGI_APPLICATION = env('WSGI_APPLICATION')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'dirtybitsdb',
-        'USER': 'postgres',
-        'PASSWORD': 'Himanshu',
-        'HOST': 'localhost',
+        'NAME': env('DB_NAME'),
+        'USER': env('DB_USER'),
+        'PASSWORD': env('DB_PASSWORD'),
+        'HOST': env('DB_HOST'),
         'PORT': '5432',
     }
 }
