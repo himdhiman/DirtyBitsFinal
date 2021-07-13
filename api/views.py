@@ -16,12 +16,15 @@ def upload_tc(request):
             for f in files:
                 file_instance = models.UploadTC(name = models.Problem.objects.get(pk = int(ProbId)), testcases=f)
                 file_instance.save()
-        files_list = os.listdir(os.path.join(BASE_DIR, 'media/tempTC'))
-        if(os.path.isdir(os.path.join(BASE_DIR, "media", "TestCases", ProbId))):
-            shutil.rmtree(os.path.join(BASE_DIR, "media", "TestCases", ProbId))
-        os.mkdir(os.path.join(BASE_DIR, "media", "TestCases", ProbId))
-        for f in files_list:
-            shutil.move(os.path.join(BASE_DIR, "media", "tempTC", f), os.path.join(BASE_DIR, "media", "TestCases", ProbId))
+            files_list = os.listdir(os.path.join(BASE_DIR, 'media/tempTC'))
+            if(os.path.isdir(os.path.join(BASE_DIR, "media", "TestCases", ProbId))):
+                shutil.rmtree(os.path.join(BASE_DIR, "media", "TestCases", ProbId))
+            os.mkdir(os.path.join(BASE_DIR, "media", "TestCases", ProbId))
+            for f in files_list:
+                shutil.move(os.path.join(BASE_DIR, "media", "tempTC", f), os.path.join(BASE_DIR, "media", "TestCases", ProbId))
+        else:
+            form = forms.TcUpload()
+            return render(request, "upload.html", {"form": form, "error" : "Unable to Upload Test Cases"})
     else:
         form = forms.TcUpload()
     return render(request, "upload.html", {"form": form})

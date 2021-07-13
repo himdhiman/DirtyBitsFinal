@@ -5,7 +5,7 @@ from api import models
 class SubmissionSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Submission
-        fields = '__all__'
+        fields = "__all__"
 
 
 class UserSerializer(serializers.ModelSerializer):
