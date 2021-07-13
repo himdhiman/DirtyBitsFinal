@@ -1,14 +1,11 @@
 from django.shortcuts import render
 from pathlib import Path
 from api import forms, models, serializers
-import os, shutil, json, requests
+import os, shutil, json
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-CODE_EVALUATION_URL = u'https://api.hackerearth.com/v4/partner/code-evaluation/submissions/'
-CLIENT_SECRET = '415b0230b4e38407f9b0d93f866a940206869e03'
 
 def upload_tc(request):
     if request.method == "POST":
@@ -49,34 +46,6 @@ def getData(request):
         q = models.Problem.objects.get(id = probId)
         res = serializers.ProblemSerializer(q)
         return Response(res.data)
-
-
-def execute(source_file_name, language):
-    source = open(source_file_name, "r")
-    input_file = open("input.txt", "r")
-    callback = "https://client.com/callback/"
-
-    data = {    
-        'source': source.read(),
-        'lang': language,
-        'time_limit': 5,
-        'memory_limit': 246323,
-        'input': input_file.read(),
-        'callback' : callback,
-        'id': "client-001"
-    }
-    headers = {"client-secret": CLIENT_SECRET}
-    input_file.close()
-    source.close()
-    resp = requests.post(CODE_EVALUATION_URL, json=data, headers=headers)
-    """
-    This will also work:
-    resp = requests.post(CODE_EVALUATION_URL, data=data, headers=headers)
-    """
-    dict = json.loads(resp.text)
-    return dict
-
-
 
 
 @api_view(['POST'])
