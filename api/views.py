@@ -50,9 +50,3 @@ def getData(request):
         res = serializers.ProblemSerializer(q)
         return Response(res.data)
 
-
-@api_view(['POST'])
-def runCode(request, uid):
-    body = json.loads(request.body)
-    # tasks.runCode.delay(body, uid)
-    return Response()
