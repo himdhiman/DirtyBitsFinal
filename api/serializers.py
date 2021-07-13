@@ -1,5 +1,18 @@
 from rest_framework import serializers
+from rest_framework.utils import field_mapping
 from api import models
+
+class SubmissionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Submission
+        fields = '__all__'
+
+
+class UserSerializer(serializers.ModelSerializer):
+    submissions = SubmissionSerializer(many=True, read_only=True)
+    class Meta:
+        model = models.CustomUser
+        fields = "__all__"
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -13,7 +26,3 @@ class ProblemSerializer(serializers.ModelSerializer):
         model = models.Problem
         fields = "__all__"
 
-class SubmissionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.Submission
-        fields = '__all__'

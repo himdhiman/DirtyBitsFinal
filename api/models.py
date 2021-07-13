@@ -2,9 +2,20 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 import string, random
 
+class Submission(models.Model):
+    problemId = models.IntegerField(blank = False)
+    language = models.IntegerField(blank = False)
+    code = models.TextField(blank = False)
+    status = models.CharField(max_length=30,default="Queued")
+    error = models.TextField(blank = True)
+    input_Given = models.TextField(blank = True)
+    output_Generated = models.TextField(blank = True) 
+    test_Cases_Passed = models.IntegerField(blank = True)
+    total_Test_Cases = models.IntegerField(blank = True)
+    submission_Date_Time = models.DateTimeField(null=True, blank = True)
 
-class DateTime(models.Model):
-    dateTime = models.DateTimeField(null=True, blank = True)
+    def __str__(self):
+        return str(self.id)
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, first_Name, last_Name, password=None):
@@ -41,14 +52,14 @@ class CustomUser(AbstractBaseUser):
     access_token = models.TextField(blank=True, null=True, default="NA")
     joining_Date = models.DateField(auto_now = True, verbose_name = "date joined")
     last_login = models.DateField(auto_now = True, verbose_name = "last login")
-    solved = models.IntegerField(blank=True, null=True, default=0)
-    partiallySolved = models.IntegerField(blank=True, null=True, default=0)
-    attemped = models.IntegerField(blank=True, null=True, default=0)
+    questions_solved = models.IntegerField(blank=True, null=True, default=0)
+    questions_partiallySolved = models.IntegerField(blank=True, null=True, default=0)
+    questions_attemped = models.IntegerField(blank=True, null=True, default=0)
     score = models.IntegerField(blank=True, null=True, default=0)
     rank = models.IntegerField(blank=True, null=True, default=0)
-    problemsSolved = models.TextField(blank=True, null=True)
-    problemPartiallySolved = models.TextField(blank=True, null=True)
-    dateTime = models.ManyToManyField(DateTime)
+    problems_Solved = models.TextField(blank=True, null=True)
+    problems_Partially_Solved = models.TextField(blank=True, null=True)
+    submissions = models.ManyToManyField(Submission, blank=True)
     is_admin = models.BooleanField(default = False)
     is_active = models.BooleanField(default = True)
     is_staff = models.BooleanField(default = False)
@@ -90,11 +101,11 @@ class Problem(models.Model):
     level = models.CharField(max_length = 20, choices = choose)
     accuracy = models.IntegerField()
     totalSubmissions = models.IntegerField()
-    sampleTc = models.IntegerField()
-    totalTC = models.IntegerField()
-    createdAt = models.DateField()
-    memoryLimit = models.IntegerField(null = True, blank = True, default=0)
-    timeLimit = models.IntegerField(null = True, blank = True, default=0)
+    sample_Tc = models.IntegerField()
+    total_Tc = models.IntegerField()
+    created_At = models.DateField(auto_now=True)
+    memory_Limit = models.IntegerField(null = True, blank = True, default=5120)
+    time_Limit = models.IntegerField(null = True, blank = True, default=1)
 
 
     def __str__(self):
@@ -105,34 +116,7 @@ class UploadTC(models.Model):
     name = models.ForeignKey(to = "Problem", on_delete = models.CASCADE)
     testcases = models.FileField(upload_to = "tempTC/", blank = True, null = True)
 
-class Submission(models.Model):
-    LANGUAGE_CODE = (
-        ('CP', 'CPP'),
-        ('JV', 'JAVA'),
-        ('P3', 'PYTHON 3'),
-        ('P2', 'PYTHON 2'),
-        ('JS', 'JAVASCRIPT')
-    )
-    STATUS_CODE = (
-        ('Q', 'QUEUED'),
-        ('R', 'RUNNING'),
-        ('AC', 'ACCEPTED'),
-        ('CE', 'COMPILATION ERROR'),
-        ('WA', 'WRONG ANSWER'),
-        ('RE', 'RUNTIME ERROR')
-    )
-    userId = models.IntegerField(blank = False)
-    problemId = models.IntegerField(blank = False)
-    language = models.CharField(max_length = 2, choices = LANGUAGE_CODE)
-    code = models.TextField(blank = True)
-    status = models.CharField(max_length = 2, choices = STATUS_CODE)
-    error = models.TextField(blank = True)
-    inputGiven = models.TextField(blank = True)
-    outputGen = models.TextField(blank = True) 
-    testCasesPassed = models.CharField(max_length = 15, blank = True)
 
-    def __str__(self):
-        return str(self.pk)
 
 
 
