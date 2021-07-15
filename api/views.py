@@ -63,7 +63,6 @@ def runCode(request, uid):
     body = json.loads(request.body)
     try:
         # models.CustomUser.objects.get(access_token = body['access_token'])
-        print(body, uid)
         tasks.runCode.delay(body = body, uid = uid)
         return Response()
     except:
