@@ -5,7 +5,8 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('', views.upload_tc),
-    path('getData/', views.getData)
+    path('getData/', views.getData),
+    path('run/<str:uid>/', views.runCode)
 ]
 
 if settings.DEBUG:
