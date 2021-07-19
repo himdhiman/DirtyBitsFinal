@@ -2,7 +2,7 @@ from django.http.response import JsonResponse
 from django.shortcuts import render
 from pathlib import Path
 from api import forms, models, serializers
-import os, shutil, json
+import os, shutil, json, base64
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from api import tasks
@@ -56,6 +56,18 @@ def getData(request):
 
     except:
         return JsonResponse({"error" : "Invalid Request"})
+
+
+@api_view(["GET"])
+def filter_by_title(request):
+    body = json.loads(request.body)
+    objs = models.Problem.objects.filter(title__icontains=body['title'])
+    send_data = []
+    for _ in objs:
+        send_data.append(_.title)
+    return JsonResponse({"data" : send_data})
+
+
 
 
 @api_view(['POST'])
