@@ -2,7 +2,7 @@ from django.http.response import JsonResponse
 from django.shortcuts import render
 from pathlib import Path
 from api import forms, models, serializers
-import os, shutil, json, base64
+import os, shutil, json
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from api import tasks
